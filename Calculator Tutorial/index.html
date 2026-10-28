@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Modern Glassmorphism Calculator</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0c0c0e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icon-512.svg">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Ambient background glow elements for realistic glass refraction -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <!-- Main Mobile App Shell -->
+  <main class="app-shell">
+    
+    <!-- Top System & Tools Bar (Clean layout with right-aligned Pill) -->
+    <header class="top-nav">
+      <!-- Mode Badge on top left -->
+      <div class="brand-tag">
+        <span class="mode-indicator" id="mode-badge">DEG</span>
+      </div>
+
+      <!-- Pill container top right: History Clock + 3 Dots Menu -->
+      <div class="top-right-pill glass-pill">
+        <!-- History button -->
+        <button class="pill-icon-btn" id="history-btn" title="Recent Calculations History" aria-label="History">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </button>
+
+        <!-- Vertical Three Dots Menu Button -->
+        <button class="pill-icon-btn" id="menu-dots-btn" title="More Options" aria-label="More options">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="5" r="1.5" fill="currentColor"></circle>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
+            <circle cx="12" cy="19" r="1.5" fill="currentColor"></circle>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Dropdown Menu for 3-dots -->
+      <div class="dropdown-menu glass-panel" id="more-options-menu">
+        <button class="dropdown-item" id="open-currency-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M14.8 9A2 2 0 0 0 13 8h-2a2 2 0 0 0 0 4h2a2 2 0 0 1 0 4h-2a2 2 0 0 1-1.8-1"></path>
+            <path d="M12 6v2m0 8v2"></path>
+          </svg>
+          <span>Online Currency Converter</span>
+        </button>
+        <button class="dropdown-item" id="open-unit-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+          <span>Unit Converter</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Calculator Screen Display (Real-time live math preview) -->
+    <section class="display-container" aria-label="Calculation Display">
+      <!-- Top Question Line (Interactive, scrollable, editable at cursor position) -->
+      <div class="input-line-wrapper" id="formula-wrapper">
+        <div class="input-formula" id="input-formula"></div>
+      </div>
+
+      <!-- Bottom Answer Line (Real-time live answer preview with reduced text size) -->
+      <div class="live-result-wrapper" id="live-result-container" style="display: none;">
+        <div class="live-result" id="live-result"></div>
+      </div>
+    </section>
+
+    <!-- Expandable Scientific / RAD Tray with HORIZONTAL SCROLLING -->
+    <div class="scientific-tray" id="scientific-tray">
+      <!-- Horizontally scrollable track with 2 rows containing all parameters (Swipe hint removed as requested) -->
+      <div class="scientific-scroll-track" id="sci-track">
+        <button class="btn glass-btn sci-btn" data-fn="sin">sin</button>
+        <button class="btn glass-btn sci-btn" data-fn="asin">sin⁻¹</button>
+
+        <button class="btn glass-btn sci-btn" data-fn="cos">cos</button>
+        <button class="btn glass-btn sci-btn" data-fn="acos">cos⁻¹</button>
+
+        <button class="btn glass-btn sci-btn" data-fn="tan">tan</button>
+        <button class="btn glass-btn sci-btn" data-fn="atan">tan⁻¹</button>
+
+        <button class="btn glass-btn sci-btn" data-fn="ln">ln</button>
+        <button class="btn glass-btn sci-btn" data-fn="log">log</button>
+
+        <button class="btn glass-btn sci-btn" data-fn="log2">log₂</button>
+        <button class="btn glass-btn sci-btn" data-fn="exp">eˣ</button>
+
+        <button class="btn glass-btn sci-btn" data-fn="sqrt">√</button>
+        <button class="btn glass-btn sci-btn" data-fn="cbrt">∛</button>
+
+        <button class="btn glass-btn sci-btn" data-fn="pow">xʸ</button>
+        <button class="btn glass-btn sci-btn" data-fn="sqr">x²</button>
+
+        <button class="btn glass-btn sci-btn" data-fn="cube">x³</button>
+        <button class="btn glass-btn sci-btn" data-fn="inv">1/x</button>
+
+        <button class="btn glass-btn sci-btn" data-fn="fact">x!</button>
+        <button class="btn glass-btn sci-btn" data-fn="abs">|x|</button>
+
+        <button class="btn glass-btn sci-btn" data-fn="pi">π</button>
+        <button class="btn glass-btn sci-btn" data-fn="e">e</button>
+
+        <button class="btn glass-btn sci-btn" data-fn="paren-open">(</button>
+        <button class="btn glass-btn sci-btn" data-fn="paren-close">)</button>
+      </div>
+    </div>
+
+    <!-- Main Circular Keypad (5 rows x 4 columns) -->
+    <section class="keypad-grid" aria-label="Calculator Keypad">
+      <!-- Row 1: AC, %, Backspace, Division -->
+      <button class="btn glass-btn fn-btn" data-action="clear" aria-label="All clear">AC</button>
+      <button class="btn glass-btn fn-btn" data-action="percent" aria-label="Percent">%</button>
+      <button class="btn glass-btn fn-btn backspace-btn" data-action="delete" aria-label="Backspace">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 5H9l-7 7 7 7h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z"></path>
+          <line x1="16" y1="9" x2="11" y2="14"></line>
+          <line x1="11" y1="9" x2="16" y2="14"></line>
+        </svg>
+      </button>
+      <button class="btn glass-btn op-btn" data-operator="/" aria-label="Divide">÷</button>
+
+      <!-- Row 2: 7, 8, 9, Multiply -->
+      <button class="btn glass-btn num-btn" data-number="7">7</button>
+      <button class="btn glass-btn num-btn" data-number="8">8</button>
+      <button class="btn glass-btn num-btn" data-number="9">9</button>
+      <button class="btn glass-btn op-btn" data-operator="*" aria-label="Multiply">×</button>
+
+      <!-- Row 3: 4, 5, 6, Subtract -->
+      <button class="btn glass-btn num-btn" data-number="4">4</button>
+      <button class="btn glass-btn num-btn" data-number="5">5</button>
+      <button class="btn glass-btn num-btn" data-number="6">6</button>
+      <button class="btn glass-btn op-btn" data-operator="-" aria-label="Subtract">−</button>
+
+      <!-- Row 4: 1, 2, 3, Add -->
+      <button class="btn glass-btn num-btn" data-number="1">1</button>
+      <button class="btn glass-btn num-btn" data-number="2">2</button>
+      <button class="btn glass-btn num-btn" data-number="3">3</button>
+      <button class="btn glass-btn op-btn" data-operator="+" aria-label="Add">+</button>
+
+      <!-- Row 5: RAD Mode Button (Bottom-left), 0, Decimal point, Equals (Orange) -->
+      <button class="btn glass-btn rad-btn" id="rad-mode-btn" title="Toggle RAD / Scientific Mode" aria-label="RAD Mode">
+        <span class="rad-icon-content">
+          <span class="rad-label">RAD</span>
+          <span class="rad-sub">√π | e</span>
+        </span>
+      </button>
+      <button class="btn glass-btn num-btn" data-number="0">0</button>
+      <button class="btn glass-btn num-btn" data-number=".">.</button>
+      <button class="btn equals-btn-orange" data-action="equals" aria-label="Equals">=</button>
+    </section>
+
+    <!-- Bottom Home Indicator for phone feel -->
+    <div class="home-indicator"></div>
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 1: RECENT CALCULATIONS HISTORY DRAWER -->
+  <!-- ============================================================== -->
+  <div class="drawer-overlay" id="history-drawer-overlay">
+    <div class="glass-drawer history-drawer" id="history-drawer">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <h3>Calculation History</h3>
+        </div>
+        <button class="close-drawer-btn" id="close-history-btn" aria-label="Close History">✕</button>
+      </div>
+
+      <div class="history-list" id="history-list">
+        <div class="empty-history-msg">No recent calculations yet.</div>
+      </div>
+
+      <div class="drawer-footer">
+        <button class="glass-btn-clear" id="clear-history-btn">Clear All History</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 2: ONLINE CURRENCY CONVERTER (Daily Live Market Synchronization) -->
+  <!-- ============================================================== -->
+  <div class="modal-backdrop" id="currency-modal-backdrop">
+    <div class="glass-modal">
+      <div class="modal-header">
+        <div>
+          <h3>Online Currency Converter</h3>
+          <span class="modal-subtitle" id="currency-status">Connecting to live market...</span>
+        </div>
+        <div class="modal-header-actions">
+          <!-- Glassy 3-dots Menu for Currency Options -->
+          <div class="modal-menu-container">
+            <button class="pill-icon-btn modal-dots-btn" id="currency-menu-dots-btn" aria-label="Currency Options" title="Currency Options">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="5" r="1"></circle>
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="12" cy="19" r="1"></circle>
+              </svg>
+            </button>
+            <div class="dropdown-menu modal-dropdown-menu" id="currency-dropdown-menu">
+              <button class="dropdown-item" id="menu-update-rates-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                </svg>
+                <span>Update Exchange Rates</span>
+              </button>
+              <button class="dropdown-item" id="menu-update-local-currency-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+                <span>Update Local Currency</span>
+              </button>
+            </div>
+          </div>
+          <button class="modal-close-btn" id="close-currency-btn" aria-label="Close currency converter">✕</button>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="converter-input-group">
+          <label>Amount</label>
+          <input type="text" id="currency-amount" value="1" class="glass-input" inputmode="decimal" placeholder="Enter amount">
+        </div>
+        
+        <div class="currency-row">
+          <div class="converter-select-group">
+            <label>From</label>
+            <select id="currency-from" class="glass-select">
+              <option value="USD" selected>USD - US Dollar ($)</option>
+              <option value="EUR">EUR - Euro (€)</option>
+              <option value="GBP">GBP - British Pound (£)</option>
+              <option value="AUD">AUD - Australian Dollar (A$)</option>
+              <option value="CAD">CAD - Canadian Dollar (C$)</option>
+              <option value="JPY">JPY - Japanese Yen (¥)</option>
+              <option value="NGN">NGN - Nigerian Naira (₦)</option>
+              <option value="INR">INR - Indian Rupee (₹)</option>
+              <option value="CNY">CNY - Chinese Yuan (¥)</option>
+              <option value="ZAR">ZAR - South African Rand (R)</option>
+              <option value="AED">AED - UAE Dirham (د.إ)</option>
+              <option value="GHS">GHS - Ghanaian Cedi (₵)</option>
+              <option value="KES">KES - Kenyan Shilling (KSh)</option>
+            </select>
+          </div>
+
+          <button class="swap-currency-btn" id="swap-currency-btn" title="Swap currencies">⇄</button>
+
+          <div class="converter-select-group">
+            <label>To</label>
+            <select id="currency-to" class="glass-select">
+              <option value="NGN" selected>NGN - Nigerian Naira (₦)</option>
+              <option value="USD">USD - US Dollar ($)</option>
+              <option value="EUR">EUR - Euro (€)</option>
+              <option value="GBP">GBP - British Pound (£)</option>
+              <option value="AUD">AUD - Australian Dollar (A$)</option>
+              <option value="CAD">CAD - Canadian Dollar (C$)</option>
+              <option value="JPY">JPY - Japanese Yen (¥)</option>
+              <option value="INR">INR - Indian Rupee (₹)</option>
+              <option value="CNY">CNY - Chinese Yuan (¥)</option>
+              <option value="ZAR">ZAR - South African Rand (R)</option>
+              <option value="AED">AED - UAE Dirham (د.إ)</option>
+              <option value="GHS">GHS - Ghanaian Cedi (₵)</option>
+              <option value="KES">KES - Kenyan Shilling (KSh)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="conversion-result-card">
+          <span class="conversion-label">Market Value</span>
+          <div class="conversion-value" id="currency-result">1,340.49 NGN</div>
+          <span class="conversion-rate" id="currency-rate-text">1 USD = 1,340.49 NGN</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 3: COMPREHENSIVE UNIT CONVERTER -->
+  <!-- ============================================================== -->
+  <div class="modal-backdrop" id="unit-modal-backdrop">
+    <div class="glass-modal unit-converter-modal">
+      <div class="modal-header">
+        <div>
+          <h3>Unit Converter</h3>
+        </div>
+        <button class="modal-close-btn" id="close-unit-btn" aria-label="Close unit converter">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Horizontal Scrolling Category Tabs -->
+        <div class="unit-categories-scroll" id="unit-categories-scroll">
+          <button class="category-pill active" data-cat="length">Length</button>
+          <button class="category-pill" data-cat="area">Area</button>
+          <button class="category-pill" data-cat="volume">Volume</button>
+          <button class="category-pill" data-cat="time">Time</button>
+          <button class="category-pill" data-cat="temperature">Temperature</button>
+          <button class="category-pill" data-cat="weight">Weight</button>
+          <button class="category-pill" data-cat="speed">Speed</button>
+        </div>
+
+        <div class="converter-input-group">
+          <label id="unit-input-label">Value to convert</label>
+          <input type="text" id="unit-amount" value="1" class="glass-input" inputmode="decimal" placeholder="Enter value">
+        </div>
+
+        <div class="currency-row">
+          <div class="converter-select-group">
+            <label>From</label>
+            <select id="unit-from" class="glass-select"></select>
+          </div>
+
+          <button class="swap-currency-btn" id="swap-unit-btn" title="Swap units">⇄</button>
+
+          <div class="converter-select-group">
+            <label>To</label>
+            <select id="unit-to" class="glass-select"></select>
+          </div>
+        </div>
+
+        <div class="conversion-result-card">
+          <span class="conversion-label" id="unit-result-label">Converted Value</span>
+          <div class="conversion-value" id="unit-result">--</div>
+          <span class="conversion-rate" id="unit-formula-text"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

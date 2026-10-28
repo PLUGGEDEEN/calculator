@@ -1,0 +1,9 @@
+{
+  "name": "glassmorphic-calculator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Modern Glassmorphism Calculator with Currency & Unit Converter",
+  "scripts": {
+    "build": "echo 'Static build ready'"
+  }
+}
