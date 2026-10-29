@@ -653,11 +653,6 @@ class GlassCalculator {
     this.updateModeBadge();
     if (this.radButton) this.radButton.classList.toggle('rad-active', this.isRadMode);
     
-    const appShell = document.querySelector('.app-shell');
-    if (appShell) {
-      appShell.classList.toggle('tray-is-open', this.isRadMode);
-    }
-
     if (this.scientificTray) {
       if (this.isRadMode) {
         this.scientificTray.classList.add('open');
