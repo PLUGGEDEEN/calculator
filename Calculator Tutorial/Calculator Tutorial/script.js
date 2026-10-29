@@ -1153,17 +1153,32 @@ function handleButtonPress(btn) {
   }
 }
 
-// 1. Standard Keypad Buttons (Numbers, Operators, AC, Percent, Equals): Instant 0ms response
+// 1. Standard Keypad Buttons (Numbers, Operators, AC, Percent, Equals): Hardware-grade 0ms response
 document.querySelectorAll('.keypad-grid .btn:not(.sci-btn):not(.backspace-btn), .top-right-pill .pill-icon-btn, .equals-btn-orange').forEach(btn => {
-  btn.addEventListener('pointerdown', (e) => {
+  let touchHandled = false;
+
+  // Ultra-fast touchstart for mobile Safari (iPhone) and Chrome (Android)
+  btn.addEventListener('touchstart', (e) => {
     e.preventDefault();
+    touchHandled = true;
     handleButtonPress(btn);
+  }, { passive: false });
+
+  // Instant desktop mouse interaction
+  btn.addEventListener('pointerdown', (e) => {
+    if (touchHandled) return;
+    if (e.pointerType === 'mouse') {
+      e.preventDefault();
+      handleButtonPress(btn);
+    }
   });
 
   btn.addEventListener('click', (e) => {
-    if (e.detail === 0) {
+    e.preventDefault();
+    if (!touchHandled && e.detail === 0) {
       handleButtonPress(btn);
     }
+    touchHandled = false;
   });
 });
 
@@ -1282,12 +1297,25 @@ document.querySelectorAll('.sci-btn').forEach(btn => {
 // 4. RAD Button toggle at bottom-left: Instant, butter-smooth toggle
 const radBtnElem = document.getElementById('rad-mode-btn');
 if (radBtnElem) {
-  radBtnElem.addEventListener('pointerdown', (e) => {
+  let radTouchHandled = false;
+  radBtnElem.addEventListener('touchstart', (e) => {
     e.preventDefault();
+    radTouchHandled = true;
     calc.toggleRadMode();
+  }, { passive: false });
+
+  radBtnElem.addEventListener('pointerdown', (e) => {
+    if (radTouchHandled) return;
+    if (e.pointerType === 'mouse') {
+      e.preventDefault();
+      calc.toggleRadMode();
+    }
   });
+
   radBtnElem.addEventListener('click', (e) => {
-    if (e.detail === 0) calc.toggleRadMode();
+    e.preventDefault();
+    if (!radTouchHandled && e.detail === 0) calc.toggleRadMode();
+    radTouchHandled = false;
   });
 }
 

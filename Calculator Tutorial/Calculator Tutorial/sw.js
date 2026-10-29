@@ -1,4 +1,4 @@
-const CACHE_NAME = 'calc-pwa-v3';
+const CACHE_NAME = 'calc-pwa-v4';
 const ASSETS = [
   '/',
   '/style.css',

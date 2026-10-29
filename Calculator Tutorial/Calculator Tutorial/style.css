@@ -20,6 +20,12 @@
   --text-muted: rgba(255, 255, 255, 0.38);
   --radius-full: 9999px;
   --radius-pill: 24px;
+
+  /* Adaptive fluid button & layout sizing that perfectly fits any phone, tablet, or laptop */
+  --btn-size: clamp(46px, min(18vw, 8.4vh), 72px);
+  --btn-font: clamp(1.35rem, min(6.4vw, 3.1vh), 2.05rem);
+  --btn-gap-y: clamp(6px, 1.5vh, 15px);
+  --btn-gap-x: clamp(6px, 2.4vw, 15px);
 }
 
 * {
@@ -30,16 +36,27 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+html {
+  height: 100%;
+  height: -webkit-fill-available;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  min-height: 100vh;
+  min-height: 100%;
+  min-height: -webkit-fill-available;
   min-height: 100dvh;
   background-color: var(--bg-black);
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow-x: hidden;
+  overflow: hidden;
   position: relative;
   color: var(--text-white);
+  touch-action: manipulation;
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ==========================================================================
@@ -80,42 +97,47 @@ body {
 }
 
 /* ==========================================================================
-   MOBILE DEVICE SHELL
+   ADAPTIVE DEVICE SHELL (Fluid on Phones, Tablets, Laptops & Desktops)
    ========================================================================== */
 .app-shell {
   position: relative;
   z-index: 10;
-  width: 100%;
-  max-width: 410px;
-  min-height: 840px;
-  height: 94vh;
-  max-height: 910px;
+  width: min(94vw, 420px);
+  height: min(94vh, 880px);
+  max-height: 880px;
   background: rgba(12, 12, 14, 0.82);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
-  border-radius: 46px;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  border-radius: 44px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 24px 20px 20px 20px;
+  padding: 20px 18px 18px 18px;
   overflow: hidden;
 }
 
-@media (max-width: 480px) {
+/* Edge-to-edge adaptive fit on mobile phones, iOS Safari, and compact viewports */
+@media (max-width: 600px), (max-height: 760px) {
   body {
     padding: 0;
     align-items: stretch;
   }
   .app-shell {
     max-width: 100%;
-    min-height: 100dvh;
+    width: 100%;
+    height: 100%;
+    height: -webkit-fill-available;
     height: 100dvh;
     max-height: 100dvh;
     border-radius: 0;
     border: none;
-    padding: calc(env(safe-area-inset-top, 20px) + 12px) 16px 14px 16px;
+    box-shadow: none;
+    padding-top: max(10px, env(safe-area-inset-top));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
   }
 }
 
@@ -252,10 +274,10 @@ body {
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
-  padding: 6px 4px 12px 4px;
-  flex: 1;
-  min-height: 110px;
-  max-height: 135px;
+  padding: 4px 4px 8px 4px;
+  flex: 1 1 auto;
+  min-height: clamp(65px, 11vh, 120px);
+  max-height: clamp(90px, 18vh, 160px);
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -420,23 +442,23 @@ body {
 .scientific-tray.open {
   grid-template-rows: 1fr;
   opacity: 1;
-  margin-bottom: 12px;
+  margin-bottom: clamp(6px, 1.4vh, 12px);
 }
 
 /* Horizontally scrollable 2-row track */
 .scientific-scroll-track {
   display: grid;
-  grid-template-rows: repeat(2, 42px);
+  grid-template-rows: repeat(2, clamp(34px, 4.4vh, 42px));
   grid-auto-flow: column;
-  grid-auto-columns: 66px;
-  gap: 8px;
+  grid-auto-columns: clamp(56px, 14.5vw, 68px);
+  gap: clamp(5px, 1.2vw, 8px);
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-x;
   overscroll-behavior-x: contain;
-  padding: 4px 2px 8px 2px;
+  padding: 3px 2px 6px 2px;
   min-height: 0;
 }
 
@@ -480,31 +502,35 @@ body {
 }
 
 /* ==========================================================================
-   MAIN CIRCULAR KEYPAD (5 x 4 GRID)
+   MAIN CIRCULAR KEYPAD (5 x 4 GRID) - Fluid Adaptive Layout
    ========================================================================== */
 .keypad-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px 14px;
-  justify-items: center;
+  grid-template-columns: repeat(4, var(--btn-size));
+  gap: var(--btn-gap-y) var(--btn-gap-x);
+  justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .btn {
   position: relative;
-  width: 70px;
-  height: 70px;
+  width: var(--btn-size);
+  height: var(--btn-size);
   border-radius: 50%;
+  aspect-ratio: 1 / 1;
   border: 1px solid var(--glass-border);
   background: var(--glass-bg-btn);
   color: var(--text-white);
-  font-size: 1.8rem;
+  font-size: var(--btn-font);
   font-weight: 400;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   overflow: hidden;
@@ -519,7 +545,7 @@ body {
 
 .fn-btn {
   background: var(--glass-bg-fn);
-  font-size: 1.45rem;
+  font-size: calc(var(--btn-font) * 0.82);
   font-weight: 500;
 }
 
@@ -529,11 +555,13 @@ body {
 
 .backspace-btn svg {
   stroke-width: 2.1;
+  width: calc(var(--btn-size) * 0.38);
+  height: calc(var(--btn-size) * 0.38);
 }
 
 .num-btn {
   background: var(--glass-bg-num);
-  font-size: 1.85rem;
+  font-size: var(--btn-font);
   font-weight: 400;
 }
 
@@ -543,7 +571,7 @@ body {
 
 .op-btn {
   background: rgba(255, 255, 255, 0.14);
-  font-size: 2rem;
+  font-size: calc(var(--btn-font) * 1.08);
   font-weight: 400;
 }
 
@@ -571,32 +599,35 @@ body {
 }
 
 .rad-label {
-  font-size: 0.95rem;
+  font-size: calc(var(--btn-font) * 0.52);
   font-weight: 600;
   letter-spacing: 0.5px;
 }
 
 .rad-sub {
-  font-size: 0.65rem;
+  font-size: calc(var(--btn-font) * 0.36);
   color: var(--text-dim);
   font-weight: 500;
 }
 
 .equals-btn-orange {
   position: relative;
-  width: 70px;
-  height: 70px;
+  width: var(--btn-size);
+  height: var(--btn-size);
   border-radius: 50%;
+  aspect-ratio: 1 / 1;
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: radial-gradient(circle at 35% 30%, #ffaa33, var(--orange-accent));
   color: #ffffff;
-  font-size: 2.2rem;
+  font-size: calc(var(--btn-font) * 1.18);
   font-weight: 500;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   overflow: hidden;
@@ -607,19 +638,6 @@ body {
 .equals-btn-orange:active {
   filter: brightness(1.15);
   transition: none !important;
-}
-
-
-
-@media (max-width: 380px) {
-  .btn, .equals-btn-orange {
-    width: 62px;
-    height: 62px;
-    font-size: 1.6rem;
-  }
-  .keypad-grid {
-    gap: 12px 10px;
-  }
 }
 
 /* ==========================================================================
