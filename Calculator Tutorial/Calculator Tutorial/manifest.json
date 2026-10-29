@@ -1,0 +1,19 @@
+{
+  "name": "Glassmorphic Calculator",
+  "short_name": "Calculator",
+  "description": "High-precision scientific calculator with live currency and unit converter",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0c0c0e",
+  "theme_color": "#0c0c0e",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
