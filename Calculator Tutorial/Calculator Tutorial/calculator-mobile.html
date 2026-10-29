@@ -33,11 +33,16 @@
   --radius-full: 9999px;
   --radius-pill: 24px;
 
-  /* Solid, comfortable, large circular button sizing - STABLE & CONSTANT (Never shrinks on RAD mode toggle) */
-  --btn-size: clamp(54px, min(19vw, 8.4vh), 70px);
-  --btn-font: clamp(1.5rem, min(6.5vw, 3.2vh), 2.05rem);
-  --btn-gap-y: clamp(8px, 1.8vh, 15px);
-  --btn-gap-x: clamp(8px, 2.8vw, 15px);
+  /* Universal Fluid Button & Grid Geometry (Smoothly scales to fit any laptop/phone viewport without ever cutting) */
+  --btn-size: clamp(44px, min(18vw, 7.5vh), 68px);
+  --btn-font: clamp(1.35rem, min(6.2vw, 3vh), 1.95rem);
+  --btn-gap-y: clamp(5px, 1.3vh, 12px);
+  --btn-gap-x: clamp(6px, 2.5vw, 14px);
+
+  /* Scientific tray responsive units */
+  --sci-btn-height: clamp(30px, 3.8vh, 38px);
+  --sci-btn-width: clamp(52px, 14vw, 66px);
+  --sci-gap: clamp(4px, 1vh, 8px);
 }
 
 * {
@@ -116,18 +121,19 @@ body {
   z-index: 10;
   width: 100%;
   max-width: 416px;
-  height: min(94vh, 870px);
-  max-height: 870px;
+  height: min(96vh, 860px);
+  height: min(96dvh, 860px);
+  max-height: 860px;
   background: rgba(12, 12, 14, 0.82);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
-  border-radius: 44px;
+  border-radius: 42px;
   box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 20px 18px 22px 18px;
+  padding: clamp(10px, 1.8vh, 18px) 16px clamp(12px, 2vh, 20px) 16px;
   overflow: hidden;
 }
 
@@ -148,7 +154,7 @@ body {
     border: none;
     box-shadow: none;
     padding-top: max(8px, env(safe-area-inset-top, 8px));
-    padding-bottom: max(22px, calc(env(safe-area-inset-bottom, 0px) + 16px));
+    padding-bottom: max(20px, calc(env(safe-area-inset-bottom, 0px) + 14px));
     padding-left: max(14px, env(safe-area-inset-left, 14px));
     padding-right: max(14px, env(safe-area-inset-right, 14px));
   }
@@ -292,10 +298,10 @@ body {
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
-  padding: 4px 6px 10px 6px;
+  padding: 2px 4px 6px 4px;
   flex: 1 1 auto;
   min-height: 0;
-  max-height: clamp(80px, 20vh, 180px);
+  max-height: clamp(60px, 16vh, 160px);
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -450,6 +456,8 @@ body {
   overflow: hidden;
   opacity: 0;
   margin-bottom: 0;
+  flex-shrink: 0;
+  width: 100%;
   transition: grid-template-rows 0.28s cubic-bezier(0.25, 1, 0.5, 1),
               opacity 0.22s ease,
               margin-bottom 0.28s cubic-bezier(0.25, 1, 0.5, 1);
@@ -460,23 +468,23 @@ body {
 .scientific-tray.open {
   grid-template-rows: 1fr;
   opacity: 1;
-  margin-bottom: 12px;
+  margin-bottom: clamp(6px, 1.2vh, 10px);
 }
 
 /* Horizontally scrollable 2-row track */
 .scientific-scroll-track {
   display: grid;
-  grid-template-rows: repeat(2, 40px);
+  grid-template-rows: repeat(2, var(--sci-btn-height));
   grid-auto-flow: column;
-  grid-auto-columns: 66px;
-  gap: 8px;
+  grid-auto-columns: var(--sci-btn-width);
+  gap: var(--sci-gap);
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-x;
   overscroll-behavior-x: contain;
-  padding: 3px 2px 6px 2px;
+  padding: 2px 2px 4px 2px;
   min-height: 0;
 }
 
@@ -529,6 +537,7 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
+  flex-shrink: 0;
 }
 
 .btn {
